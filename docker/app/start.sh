@@ -1,2 +1,6 @@
 #!/bin/bash
-echo -e "Everything is working now."
+while true
+do
+  echo "This is an infinite loop"
+  sleep 5
+done
