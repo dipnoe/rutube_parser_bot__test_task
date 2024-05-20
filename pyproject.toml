@@ -16,6 +16,7 @@ pylint = "^3.2.1"
 beautifulsoup4 = "^4.12.3"
 httpx = "^0.27.0"
 lxml = "^5.2.2"
+demjson3 = "^3.0.6"
 
 
 [build-system]

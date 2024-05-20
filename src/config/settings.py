@@ -26,6 +26,8 @@ class DatabaseSettings(BaseSettings):
 
 class RutubeSettings(BaseSettings):
     url: str = Field("", env="RUTUBE_URL", type=str)
+    video_pagination_url: str = Field("", env="RUTUBE_VIDEO_PAGINATION_URL", type=str)
+    videos_per_page: int = Field(20, env="RUTUBE_VIDEOS_PER_PAGE", type=int)
 
     model_config = SettingsConfigDict(
         env_file=ENV_PATH,
@@ -37,6 +39,12 @@ class RutubeSettings(BaseSettings):
 class AppSettings(BaseSettings):
     db: DatabaseSettings = DatabaseSettings()
     rutube: RutubeSettings = RutubeSettings()
+    logfile: str = Field("", env="APP_LOGFILE", type=str)
 
+    model_config = SettingsConfigDict(
+        env_file=ENV_PATH,
+        env_prefix='APP_',
+        extra='ignore'
+    )
 
 settings = AppSettings()

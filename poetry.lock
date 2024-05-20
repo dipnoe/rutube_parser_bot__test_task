@@ -105,6 +105,16 @@ files = [
 ]
 
 [[package]]
+name = "demjson3"
+version = "3.0.6"
+description = "encoder, decoder, and lint/validator for JSON (JavaScript Object Notation) compliant with RFC 7159"
+optional = false
+python-versions = "*"
+files = [
+    {file = "demjson3-3.0.6.tar.gz", hash = "sha256:37c83b0c6eb08d25defc88df0a2a4875d58a7809a9650bd6eee7afd8053cdbac"},
+]
+
+[[package]]
 name = "dill"
 version = "0.3.8"
 description = "serialize all of Python"
@@ -926,4 +936,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "b6c70effdf5660e217a5b943eadc1dfcfb6cd6a0f4a74657fb623a412352b61e"
+content-hash = "3a10c433563eb2d4910433fc3eccd2ec6a7e859d80a81e00ee64ef22c8aa0809"
