@@ -1,5 +1,7 @@
 __all__ = [
-    "settings"
+    "settings",
+    "logger"
 ]
 
 from .settings import settings
+from .logger import logger

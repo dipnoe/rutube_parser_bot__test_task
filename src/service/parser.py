@@ -7,6 +7,7 @@ import httpx
 from bs4 import BeautifulSoup
 
 from config import settings
+from config import logger
 from dto.channel import Channel
 from dto.video import Video
 from models.video import DESCRIPTION_MAX_LENGTH
@@ -99,6 +100,7 @@ class ChannelParser:
         # 503 is possible if there are too many requests
         # So this is a temporary solution
         if result.status_code != 200:
+            logger.error(f'status_code: {result.status_code}, url: {pagination_url}')
             return {
                 "num": page,
                 "videos": []
