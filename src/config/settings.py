@@ -16,6 +16,7 @@ class DatabaseSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=ENV_PATH,
         env_prefix='DB_',
+        extra='ignore'
     )
 
     @property
@@ -23,8 +24,19 @@ class DatabaseSettings(BaseSettings):
         return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
 
 
+class RutubeSettings(BaseSettings):
+    url: str = Field("", env="RUTUBE_URL", type=str)
+
+    model_config = SettingsConfigDict(
+        env_file=ENV_PATH,
+        env_prefix='RUTUBE_',
+        extra='ignore'
+    )
+
+
 class AppSettings(BaseSettings):
     db: DatabaseSettings = DatabaseSettings()
+    rutube: RutubeSettings = RutubeSettings()
 
 
 settings = AppSettings()
