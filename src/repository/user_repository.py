@@ -12,4 +12,4 @@ class UserRepository:
         return self.session.query(User).filter_by(id=user_id).first()
 
     def get_by_telegram_id(self, telegram_id) -> User | None:
-        return self.session.query(User).filter_by(telegram_id=telegram_id).first()
+        return self.session.query(User).filter_by(telegram_id=str(telegram_id)).first()

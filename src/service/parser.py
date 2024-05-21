@@ -18,23 +18,29 @@ class ChannelParser:
         self.url = channel_url
         self.parse_video_amount = parse_video_amount
 
-    async def parse(self):
-        with httpx.Client(
-                headers={},
-                follow_redirects=True
-        ) as client:
-            result: httpx.Response = client.get(url=self.url)
+    async def parse(self) -> Channel | None:
+        try:
+            async with httpx.AsyncClient(
+                    headers={},
+                    follow_redirects=True,
+                    timeout=settings.rutube.timeout,
+            ) as client:
+                result: httpx.Response = await client.get(url=self.url)
 
-        markup_data = result.read()
+            markup_data = await result.aread()
+        except Exception as e:
+            logger.error(f'exception: {e}, url: {self.url}')
+            return None
+
         if result.status_code != 200:
-            raise Exception(f'status_code: {result.status_code}')
+            logger.error(f'status_code: {result.status_code}, url: {self.url}')
+            return None
 
         soup: BeautifulSoup = BeautifulSoup(markup=markup_data, features="lxml")
-        data: str = soup.find(
-            name='script',
-            type='text/javascript',
-            string=re.compile(r'window\.version')
-        ).text
+        data: str = soup.find(name='script',
+                              type='text/javascript',
+                              string=re.compile(r'window\.version')
+                              ).text
 
         s_index = data.find('{')
         f_index = data.rfind('}')
@@ -63,11 +69,10 @@ class ChannelParser:
         for video_batch in video_batches:
             videos += video_batch['videos']
 
-        return Channel(
-            title=channel_title,
-            videos=videos,
-            channel_url=self.url
-        )
+        return Channel(title=channel_title,
+                       videos=videos,
+                       channel_url=self.url
+                       )
 
     def __prepare_pagination_urls(self, channel_id: int, channel_videos_count: int) -> list[str]:
         if channel_videos_count >= self.parse_video_amount:
@@ -86,15 +91,23 @@ class ChannelParser:
         return result
 
     async def __process_page(self, pagination_url: str, page: int, videos_to_get: int) -> dict:
-        async with httpx.AsyncClient(
-                headers={
-                    'Accept': 'application/json',
-                },
-                follow_redirects=True
-        ) as client:
-            result: httpx.Response = await client.get(url=pagination_url)
+        try:
+            async with httpx.AsyncClient(
+                    headers={
+                        'Accept': 'application/json',
+                    },
+                    follow_redirects=True,
+                    timeout=settings.rutube.timeout,
+            ) as client:
+                result: httpx.Response = await client.get(url=pagination_url)
 
-        page_json = await result.aread()
+            page_json = await result.aread()
+        except Exception as e:  # rutube can cause ConnectTimeout
+            logger.error(f'exception: {e}, url: {pagination_url}')
+            return {
+                "num": page,
+                "videos": []
+            }
 
         # 404 is possible if there are hidden or deleted videos on this channel
         # 503 is possible if there are too many requests
