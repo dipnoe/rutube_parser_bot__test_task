@@ -16,7 +16,10 @@ class Bot:
         self.__settings = settings
         self.__repo = repo
         self.__dp = Dispatcher()
-        self.__bot = BaseBot(token=settings.bot.token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+        self.__bot = BaseBot(
+            token=settings.bot.token,
+            default=DefaultBotProperties(parse_mode=ParseMode.HTML)
+        )
 
     async def start(self) -> None:
         Commands(dp=self.__dp, settings=self.__settings, repo=self.__repo).register_commands()

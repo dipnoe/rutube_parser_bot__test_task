@@ -17,10 +17,12 @@ def retry_on_exception_async(max_retries=2, delay=1, exceptions=(Exception,)):
                     return await func(*args, **kwargs)
                 except exceptions as e:
                     attempts += 1
-                    logger.error(f"Attempt {attempts} failed with exception: {e}. Retrying in {delay} seconds...")
+                    logger.error(f"Attempt {attempts} failed "
+                                 f"with exception: {e}. "
+                                 f"Retrying in {delay} seconds...")
                     await asyncio.sleep(delay)
             logger.fatal(f"All {max_retries} attempts failed.")
-            raise
+            raise  # pylint: disable=misplaced-bare-raise
 
         return wrapper
 

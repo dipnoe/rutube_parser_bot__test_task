@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ -n $CELERY_MODE ]]; then
-    make worker-run
+    make run-worker
 else
-    make bot-run
+    make run-bot
 fi

@@ -21,7 +21,7 @@ class Commands:
     async def start(self, message: Message):
         user = self.__repo.user_repository.get_by_telegram_id(message.from_user.id)
         if not user:
-            user = User(telegram_id=message.from_user.id)
+            user = User(telegram_id=str(message.from_user.id))
             self.__repo.user_repository.save(user=user)
             self.__repo.flush()
             self.__repo.commit()
@@ -29,7 +29,8 @@ class Commands:
             logger.info(f"new user created: id: {user.id}, telegram_id: {user.telegram_id}")
 
         await message.answer(f'Привет, {html.bold(message.from_user.full_name)}!\n'
-                             f'В прошлой жизни я был кровавым диктатором, развязывал войны и ел людей. '
+                             f'В прошлой жизни я был кровавым диктатором, '
+                             f'развязывал войны и ел детей.'
                              'Поэтому сейчас я помогу тебе спарсить канал на Rutube!')
 
     async def parse_channel(self, message: Message, state: FSMContext):
@@ -38,7 +39,7 @@ class Commands:
 
     async def show_channels(self, message: Message):
         await message.answer(
-            f'Каналы, которые вы парсили.',
+            'Каналы, которые вы парсили.',
             reply_markup=self.__inline.create_channels_keyboard(message.from_user.id)
         )
 

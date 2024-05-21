@@ -1,4 +1,4 @@
-from aiogram import Bot, Dispatcher
+from aiogram import Dispatcher
 from aiogram.types import CallbackQuery
 
 from bot.keyboards.callback_data import ChannelCallback, VideoCallback, VideoPaginationCallback, \
@@ -31,14 +31,19 @@ class Callbacks:
                                       f"Просмотры: <b>{video.views_count}</b>\n\n"
                                       f"Ссылка:\n{video.video_url}")
 
-    async def handle_channel_pagination_callback(self, call: CallbackQuery, callback_data: ChannelPaginationCallback):
+    async def handle_channel_pagination_callback(self,
+                                                 call: CallbackQuery,
+                                                 callback_data: ChannelPaginationCallback
+                                                 ):
         user_id: int = callback_data.user_id
         page: int = callback_data.page
         keyboard = self.__inline.create_channels_keyboard(user_tg_id=user_id, page=page)
 
         await call.message.edit_reply_markup(reply_markup=keyboard)
 
-    async def handle_video_pagination_callback(self, call: CallbackQuery, callback_data: VideoPaginationCallback):
+    async def handle_video_pagination_callback(self,
+                                               call: CallbackQuery,
+                                               callback_data: VideoPaginationCallback):
         channel_id: int = callback_data.channel_id
         page: int = callback_data.page
         keyboard = self.__inline.create_videos_keyboard(channel_id=channel_id, page=page)
@@ -46,7 +51,19 @@ class Callbacks:
         await call.message.edit_reply_markup(reply_markup=keyboard)
 
     def register_callbacks(self):
-        self.__dp.callback_query.register(self.handler_channel_callback, ChannelCallback.filter())
-        self.__dp.callback_query.register(self.handle_video_callback, VideoCallback.filter())
-        self.__dp.callback_query.register(self.handle_channel_pagination_callback, ChannelPaginationCallback.filter())
-        self.__dp.callback_query.register(self.handle_video_pagination_callback, VideoPaginationCallback.filter())
+        self.__dp.callback_query.register(
+            self.handler_channel_callback,
+            ChannelCallback.filter()
+        )
+        self.__dp.callback_query.register(
+            self.handle_video_callback,
+            VideoCallback.filter()
+        )
+        self.__dp.callback_query.register(
+            self.handle_channel_pagination_callback,
+            ChannelPaginationCallback.filter()
+        )
+        self.__dp.callback_query.register(
+            self.handle_video_pagination_callback,
+            VideoPaginationCallback.filter()
+        )

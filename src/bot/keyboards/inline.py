@@ -1,10 +1,9 @@
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from config import settings
+from config.settings import AppSettings
 from bot.keyboards.callback_data import ChannelCallback, VideoCallback, VideoPaginationCallback, \
     ChannelPaginationCallback
-from config.settings import AppSettings
 from repository.manager import RepositoryManager
 
 
@@ -15,7 +14,7 @@ class InlineKeyboard:
 
     def create_channels_keyboard(self, user_tg_id, page: int = 0):
         page_size = self.__settings.bot.page_size
-        user = self.__repo.user_repository.get_by_telegram_id(telegram_id=user_tg_id)
+        user = self.__repo.user_repository.get_by_telegram_id(telegram_id=str(user_tg_id))
 
         builder = InlineKeyboardBuilder()
 
