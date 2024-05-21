@@ -114,10 +114,11 @@ class ChannelParser:
                 break
 
             videos.append(Video(
-                title=video['title'],
-                description=video['description'][:DESCRIPTION_MAX_LENGTH],
-                views_count=video['hits'],
-                video_url=video['video_url'],
+                title=video['title'] if video["title"] else "",
+                description=(video['description'][:DESCRIPTION_MAX_LENGTH]
+                             if video['description'] else ""),
+                views_count=video['hits'] if video['hits'] else 0,
+                video_url=video['video_url'] if video['video_url'] else "",
             ))
 
         return {
