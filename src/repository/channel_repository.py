@@ -17,7 +17,7 @@ class ChannelRepository:
             channel_url=channel_url
         ).first()
 
-    def list_for_user_id(self, user_id, page=1, per_page=10) -> list[dict]:
+    def list_for_user_id(self, user_id, page=1, per_page=10) -> dict[str, int | list[Channel]]:
         query = self.session.query(Channel).filter_by(user_id=user_id)
         total = query.count()  # Общее количество записей
         channels = query.offset((page - 1) * per_page).limit(per_page).all()

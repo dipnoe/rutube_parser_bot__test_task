@@ -35,10 +35,23 @@ class RutubeSettings(BaseSettings):
         extra='ignore'
     )
 
+class BotSettings(BaseSettings):
+    token: str = Field("", env="BOT_TOKEN", type=str)
+    page_size: int = Field("", env="BOT_PAGE_SIZE", type=int)
+    forwards: str = Field("->", env="BOT_FORWARDS", type=int)
+    backwards: str = Field("<-", env="BOT_BACKWARDS", type=int)
+
+    model_config = SettingsConfigDict(
+        env_file=ENV_PATH,
+        env_prefix='BOT_',
+        extra='ignore'
+    )
+
 
 class AppSettings(BaseSettings):
     db: DatabaseSettings = DatabaseSettings()
     rutube: RutubeSettings = RutubeSettings()
+    bot: BotSettings = BotSettings()
     logfile: str = Field("", env="APP_LOGFILE", type=str)
 
     model_config = SettingsConfigDict(

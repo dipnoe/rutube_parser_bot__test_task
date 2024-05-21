@@ -11,15 +11,15 @@ class VideoRepository:
     def get_by_id(self, video_id) -> Video | None:
         return self.session.query(Video).filter_by(id=video_id).first()
 
-    def list_for_channel_id(self, channel_id, page=1, per_page=10) -> list[dict]:
+    def list_for_channel_id(self, channel_id, page=1, per_page=10) -> dict[str, int | list[Video]]:
         query = self.session.query(Video).filter_by(channel_id=channel_id)
         total = query.count()  # Общее количество записей
-        channels = query.offset((page - 1) * per_page).limit(per_page).all()
+        videos = query.offset((page - 1) * per_page).limit(per_page).all()
         return {
             'total': total,
             'page': page,
             'per_page': per_page,
-            'channels': channels
+            'videos': videos
         }
 
     def get_list_of_duplicate_urls(self, channel_id, urls: list[str]) -> list[str]:
