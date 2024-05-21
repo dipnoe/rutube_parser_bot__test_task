@@ -1,7 +1,9 @@
 #!/bin/bash
 
-if [[ -n $CELERY_MODE ]]; then
-    make run-worker
+if [[ -z $CELERY_MODE ]];
+then
+  alembic upgrade head &&
+  python src/main.py
 else
-    make run-bot
+  celery -A src.tasks.celery_tasks worker -l info
 fi

@@ -1,6 +1,17 @@
-version: '3.9'
-
 services:
+
+  redis:
+    image: 'redis:7.2.5-alpine'
+    volumes:
+      - redis-data:/data
+    ports:
+      - '63791:6379'
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      timeout: 2s
+      retries: 5
+
   postgres:
     build:
       context: .
@@ -35,5 +46,22 @@ services:
       postgres:
         condition: service_healthy
 
+  celery:
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    command: ["bash", "docker/app/start.sh"]
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - CELERY_MODE=1
+    volumes:
+      - .:/app
+    working_dir: /app
+    tty: true
+    depends_on:
+      - redis
+      - app
+
 volumes:
   pg-data:
+  redis-data:

@@ -28,6 +28,7 @@ class RutubeSettings(BaseSettings):
     url: str = Field("", env="RUTUBE_URL", type=str)
     video_pagination_url: str = Field("", env="RUTUBE_VIDEO_PAGINATION_URL", type=str)
     videos_per_page: int = Field(20, env="RUTUBE_VIDEOS_PER_PAGE", type=int)
+    timeout: float = Field(20.0, env="RUTUBE_TIMEOUT", type=float)
 
     model_config = SettingsConfigDict(
         env_file=ENV_PATH,
