@@ -29,9 +29,7 @@ class Commands:
             logger.info(f"new user created: id: {user.id}, telegram_id: {user.telegram_id}")
 
         await message.answer(f'Привет, {html.bold(message.from_user.full_name)}!\n'
-                             f'В прошлой жизни я был кровавым диктатором, '
-                             f'развязывал войны и ел детей.'
-                             'Поэтому сейчас я помогу тебе спарсить канал на Rutube!')
+                             f'В прошлой жизни я рвал цветы и ел детей. А сейчас я паршу видео с  Rutube!')
 
     async def parse_channel(self, message: Message, state: FSMContext):
         await message.answer('Пришлите ссылку на канал, который нужно спарсить.')
