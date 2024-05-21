@@ -35,6 +35,7 @@ class RutubeSettings(BaseSettings):
         extra='ignore'
     )
 
+
 class BotSettings(BaseSettings):
     token: str = Field("", env="BOT_TOKEN", type=str)
     page_size: int = Field("", env="BOT_PAGE_SIZE", type=int)
@@ -48,10 +49,20 @@ class BotSettings(BaseSettings):
     )
 
 
+class RedisSettings(BaseSettings):
+    redis_url: str = Field("", env="REDIS_URL", type=str)
+    model_config = SettingsConfigDict(
+        env_file=ENV_PATH,
+        env_prefix='REDIS_',
+        extra='ignore'
+    )
+
+
 class AppSettings(BaseSettings):
     db: DatabaseSettings = DatabaseSettings()
     rutube: RutubeSettings = RutubeSettings()
     bot: BotSettings = BotSettings()
+    redis: RedisSettings = RedisSettings()
     logfile: str = Field("", env="APP_LOGFILE", type=str)
 
     model_config = SettingsConfigDict(
@@ -59,5 +70,6 @@ class AppSettings(BaseSettings):
         env_prefix='APP_',
         extra='ignore'
     )
+
 
 settings = AppSettings()

@@ -12,7 +12,7 @@ from repository.manager import RepositoryManager
 
 
 class Commands:
-    def __init__(self, dp: Dispatcher, settings: AppSettings,repo: RepositoryManager):
+    def __init__(self, dp: Dispatcher, settings: AppSettings, repo: RepositoryManager):
         self.__dp = dp
         self.__repo = repo
         self.__settings = settings
@@ -37,7 +37,10 @@ class Commands:
         await state.set_state(Form.waiting_for_link)
 
     async def show_channels(self, message: Message):
-        await message.answer(f'Каналы, которые вы парсили.', reply_markup=self.__inline.create_channels_keyboard(message.from_user.id))
+        await message.answer(
+            f'Каналы, которые вы парсили.',
+            reply_markup=self.__inline.create_channels_keyboard(message.from_user.id)
+        )
 
     def register_commands(self):
         self.__dp.message.register(self.start, CommandStart())
